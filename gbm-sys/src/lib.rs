@@ -4,11 +4,7 @@
 // it is not so.
 #![cfg_attr(test, allow(deref_nullptr))]
 
-#[cfg(feature = "use_bindgen")]
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
-
-#[cfg(not(feature = "use_bindgen"))]
-include!("bindings.rs");
 
 #[link(name = "gbm")]
 extern "C" {}

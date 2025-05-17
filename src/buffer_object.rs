@@ -86,7 +86,7 @@ pub struct MappedBufferObject<'a, T: 'static> {
     y: u32,
 }
 
-impl<'a, T> fmt::Debug for MappedBufferObject<'a, T> {
+impl<T> fmt::Debug for MappedBufferObject<'_, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("MappedBufferObject")
             .field(
@@ -107,7 +107,7 @@ impl<'a, T> fmt::Debug for MappedBufferObject<'a, T> {
     }
 }
 
-impl<'a, T: 'static> MappedBufferObject<'a, T> {
+impl<T: 'static> MappedBufferObject<'_, T> {
     /// Get the stride of the buffer object
     ///
     /// This is calculated by the backend when it does the allocation of the buffer.
@@ -146,7 +146,7 @@ impl<'a, T: 'static> MappedBufferObject<'a, T> {
     }
 }
 
-impl<'a, T: 'static> Deref for MappedBufferObject<'a, T> {
+impl<T: 'static> Deref for MappedBufferObject<'_, T> {
     type Target = BufferObject<T>;
     fn deref(&self) -> &BufferObject<T> {
         match &self.bo {
@@ -156,7 +156,7 @@ impl<'a, T: 'static> Deref for MappedBufferObject<'a, T> {
     }
 }
 
-impl<'a, T: 'static> DerefMut for MappedBufferObject<'a, T> {
+impl<T: 'static> DerefMut for MappedBufferObject<'_, T> {
     fn deref_mut(&mut self) -> &mut BufferObject<T> {
         match &mut self.bo {
             BORef::Ref(_) => unreachable!(),
@@ -165,7 +165,7 @@ impl<'a, T: 'static> DerefMut for MappedBufferObject<'a, T> {
     }
 }
 
-impl<'a, T: 'static> Drop for MappedBufferObject<'a, T> {
+impl<T: 'static> Drop for MappedBufferObject<'_, T> {
     fn drop(&mut self) {
         let ffi = match &self.bo {
             BORef::Ref(bo) => &bo.ffi,
